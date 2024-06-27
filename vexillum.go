@@ -42,7 +42,7 @@ func (v *Vexillum) Deactivate(feature string) {
 // VexillumMiddleware is a middleware that injects feature flags into the context
 // (so that it can be used in the templ views).
 func VexillumMiddleware(vexillum *Vexillum) caesar.Handler {
-	return func(ctx *caesar.CaesarCtx) error {
+	return func(ctx *caesar.Context) error {
 		ctx.Request = ctx.Request.WithContext(
 			context.WithValue(ctx.Request.Context(), VEXILLUM_CONTEXT_KEY, vexillum.Flags),
 		)
@@ -55,7 +55,7 @@ func VexillumMiddleware(vexillum *Vexillum) caesar.Handler {
 
 // EnsureFeatureEnabledMiddleware returns a middleware that checks if a feature is active.
 func (v *Vexillum) EnsureFeatureEnabledMiddleware(feature string) caesar.Handler {
-	return func(ctx *caesar.CaesarCtx) error {
+	return func(ctx *caesar.Context) error {
 		if v.IsActive(feature) {
 			ctx.Next()
 			return nil
